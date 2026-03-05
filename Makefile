@@ -7,7 +7,7 @@ SRC = a_maze_ing.py \
 	  draw_path.py
 
 install:
-	uv venv
+	uv venv --python 3.10
 	uv add --dev flake8 mypy
 	uv add pydantic pygame
 

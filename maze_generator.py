@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, ValidationError, model_validator
 import random
+from typing import Literal
 
 class MazeConfig(BaseModel):
     width: int = Field(..., ge=9)
@@ -9,6 +10,7 @@ class MazeConfig(BaseModel):
     output_file: str = Field(...)
     perfect: bool = Field(...)
     seed: int | None = Field(default=None)
+    print_mode: Literal["ascii", "pygame"] = Field(default="ascii")
 
     @model_validator(mode='after')
     def validate_rules(self) -> 'MazeConfig':
@@ -40,7 +42,8 @@ class MazeGenerator():
             "PERFECT"
         ]
         additional_keys = [
-            "SEED"
+            "SEED",
+            "PRINT_MODE"
         ]
 
         with open("config.txt", "r") as f:
@@ -79,7 +82,8 @@ class MazeGenerator():
             exit=list(map(int, self.config["EXIT"].split(","))),
             output_file=self.config["OUTPUT_FILE"],
             perfect=self.config["PERFECT"].lower() == "true",
-            seed=int(self.config["SEED"]) if "SEED" in self.config else None
+            seed=int(self.config["SEED"]) if "SEED" in self.config else None,
+            print_mode=str(self.config["PRINT_MODE"]) if "PRINT_MODE" in self.config else None
         )
 
         self.config["WIDTH"] = validated.width

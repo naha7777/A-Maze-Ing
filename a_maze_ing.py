@@ -1,7 +1,6 @@
 from draw_ascii import draw_ascii
-# from draw_maze import draw_maze
+from draw_maze import draw_maze
 from ascii_interactions import interactions
-# from draw_path import draw_path
 from maze_generator import MazeGenerator
 import pydantic
 
@@ -23,9 +22,15 @@ def a_maze_ing():
         maze = MazeGenerator()
         maze.init_grid()
         maze.prim()
+        maze.add_42()
+        maze.fix_isolated()
         maze.write_output()
+        # if maze.config["PRINT_MODE"] == "pygame":
+
+        # else:
         draw_ascii(maze.config, "rgb.WHITE")
-        interactions(maze)
+            # interactions(maze)
+        draw_maze(maze.config)
 
     except pydantic.ValidationError as e:
         for error in e.errors():
