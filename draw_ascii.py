@@ -42,7 +42,7 @@ class rgb():
     GRAY = (169, 169, 169)
 
 
-def draw_ascii(maze_datas: dict) -> None:
+def draw_ascii(maze_datas: dict, color: str) -> None:
     with open("maze.txt", "r") as hexa:
         hexas = hexa.read()
     inp = maze_datas.get("ENTRY")
@@ -51,7 +51,8 @@ def draw_ascii(maze_datas: dict) -> None:
     height = maze_datas.get("HEIGHT")
     cell_walls = run_maze(hexas, width, height)
     wall = "\u2588"
-    color = rgb.WHITE
+    color_name = color.split(".")[1]
+    color = getattr(rgb, color_name)
     grid = [[" " for _ in range(width)] for _ in range(height)]
     x = 0
     color_ft = [(2, 2), (2, 3), (2, 4), (3, 4),

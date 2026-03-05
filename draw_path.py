@@ -48,7 +48,8 @@ def find_path(maze_datas: dict) -> str:
     width = maze_datas.get("WIDTH")
     height = maze_datas.get("HEIGHT")
     lines = text.split("\n")
-    print(lines)
+    lines.reverse()
+    path = lines[2]
     path = text[(width * height) + height + 1:]
     return path
 
@@ -71,7 +72,9 @@ def calcul_path_coordinates(input: tuple, path: str) -> list:
     return path_coordinates
 
 
-def draw_path(maze_datas: dict) -> None:
+def draw_path(maze_datas: dict, color: str) -> None:
+    color_name = color.split(".")[1]
+    color = getattr(rgb, color_name)
     with open("maze.txt", "r") as hexa:
         hexas = hexa.read()
     inp = maze_datas.get("ENTRY")
@@ -82,11 +85,14 @@ def draw_path(maze_datas: dict) -> None:
     height = maze_datas.get("HEIGHT")
     cell_walls = run_maze(hexas, width, height)
     wall = "\u2588"
-    color = rgb.WHITE
     grid = [[" " for _ in range(width)] for _ in range(height)]
     x = 0
     path = find_path(maze_datas)
     path_coordinates = calcul_path_coordinates(inp, path)
+    color_ft = [(2, 2), (2, 3), (2, 4), (3, 4),
+                (4, 4), (4, 5), (4, 6), (6, 2),
+                (7, 2), (8, 2), (8, 3), (8, 4),
+                (7, 4), (6, 4), (6, 5), (6, 6), (7, 6), (8, 6)]
     for x in range(width+2):
         if x == width+1:
             print(color_text(wall, color))
@@ -95,6 +101,8 @@ def draw_path(maze_datas: dict) -> None:
     for i, cell in enumerate(cell_walls):
         x = i % width
         y = i // width
+        if (x, y) in color_ft:
+            grid[y-1][x-1] = (color_text(wall, rgb.BLUE))
         if (x, y) in path_coordinates:
             grid[y][x] = (color_text(wall, rgb.GREEN))
         if (x, y) == inp:

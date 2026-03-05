@@ -1,8 +1,15 @@
 # comment line
 
-WIDTH=31
-HEIGHT=31
-ENTRY=7,23
-EXIT=7,7
+WIDTH=20
+HEIGHT=32
+ENTRY=1,1
+EXIT=19,31
 OUTPUT_FILE=maze.txt
 PERFECT=False
+
+#7,,7
+#maxe.txt.txt
+#TRUE/FALSE
+#10,10d
+#entry/exit same place
+#regle sortie pas a cote de l'entree

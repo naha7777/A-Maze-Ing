@@ -1,11 +1,16 @@
 from maze_generator import MazeGenerator
 from draw_ascii import draw_ascii
+from draw_path import draw_path
 
 def interactions(maze: MazeGenerator):
     show_path = False
+    i = 0
+    color_list = ["rgb.WHITE", "rgb.YELLOW",
+                  "rgb.PINK", "rgb.PURPLE",
+                  "rgb.BROWN", "rgb.GOLD", "rgb.GRAY",]
     while True:
         print("\n=== A-maze-ing ===")
-        path = "Hide" if show_path else "Show path from entry to exit"
+        path = "Hide path" if show_path else "Show path from entry to exit"
         print("1- Re-generate a new maze")
         print(f"2- {path}")
         print("3- Rotate maze colors")
@@ -18,27 +23,23 @@ def interactions(maze: MazeGenerator):
                 maze.add_42()
                 maze.fix_isolated()
                 maze.write_output()
-                draw_ascii(maze.config)
+                draw_ascii(maze.config, color_list[i])
             elif int(choice) == 2:
                 if show_path is False:
-                    # appeler la fonction qui montrera le path
+                    draw_path(maze.config, color_list[i])
                     show_path = not show_path
                 else:
-                    # rapeler la fonction sans le path
+                    draw_ascii(maze.config, color_list[i])
                     show_path = not show_path
             elif int(choice) == 3:
-                # color_list = ["rgb.BLUE",
-                #               "rgb.YELLOW",
-                #               "rgb.PINK",
-                #               "rgb,PURPLE",
-                #               "rgb.BROWN",
-                #               "rgb.GOLD",
-                #               "rgb.GRAY",
-                #               "rgb.WHITE"]
-                # i = 0
-                # appeler la fonction avec ou sans path avec en param la couleur
-                # a chaque appel on incremente color_list[i] pour avoir une autre couleur
-                pass
+                if show_path is False:
+                    i += 1
+                    draw_path(maze.config, color_list[i])
+                else:
+                    i += 1
+                    draw_ascii(maze.config, color_list[i])
+                if i == 6:
+                    i = -1
             elif int(choice) == 4:
                 exit(1)
             else:

@@ -24,7 +24,7 @@ def a_maze_ing():
         maze.init_grid()
         maze.prim()
         maze.write_output()
-        draw_ascii(maze.config)
+        draw_ascii(maze.config, "rgb.WHITE")
         interactions(maze)
 
     except pydantic.ValidationError as e:
