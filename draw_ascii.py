@@ -42,6 +42,7 @@ class rgb():
     BROWN = (139, 69, 25)
     GOLD = (184, 134, 11)
     GRAY = (169, 169, 169)
+    BLACK = (30, 30, 30)
 
 
 def draw_ascii(maze_datas: dict, color: str) -> None:
@@ -67,25 +68,26 @@ def draw_ascii(maze_datas: dict, color: str) -> None:
 
     grid = [[" " for _ in range(width)] for _ in range(height)]
 
+    i = 0
+    for y in range(height):
+        for x in range(width):
+            if (x, y) in color_ft:
+                grid[y-1][x-1] = (color_text(wall, rgb.BLUE))
+            if x % 2 != 0 and y % 2 != 0:
+                grid[y][x] = (color_text(wall, color))
+            if x % 2 == 0 and y % 2 == 0:
+                grid[y][x] = (color_text(wall, rgb.BLACK))
+                if cell_walls[i].get("S") == 1 and y + 1 < height:
+                    grid[y + 1][x] = color_text(wall, color)
+                if cell_walls[i].get("E") == 1 and x + 1 < width:
+                    grid[y][x + 1] = color_text(wall, color)
+                i += 1
+
     for x in range(width+2):
         if x == width+1:
             print(color_text(wall, color))
         else:
             print(color_text(wall, color), end="")
-
-    for i, cell in enumerate(cell_walls):
-        x = i % width
-        y = i // width
-        if (x, y) in color_ft:
-            grid[y-1][x-1] = (color_text(wall, rgb.BLUE))
-        if (x, y) == inp:
-            grid[y-1][x-1] = (color_text(wall, rgb.GREEN))
-        if (x, y) == outp:
-            grid[y-1][x-1] = (color_text(wall, rgb.RED))
-        if cell.get("S") == 1 and y + 1 < height:
-            grid[y + 1][x] = color_text(wall, color)
-        if cell.get("E") == 1 and x + 1 < width:
-            grid[y][x + 1] = color_text(wall, color)
 
     for y in grid:
         print(color_text(wall, color), end="")

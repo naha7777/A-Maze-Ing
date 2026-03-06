@@ -21,11 +21,7 @@ def interactions(maze: MazeGenerator):
         try:
 
             if int(choice) == 1:
-                maze.init_grid()
-                maze.prim()
-                maze.add_42()
-                maze.fix_isolated()
-                maze.write_output()
+                maze.create_maze()
                 draw_ascii(maze.config, color_list[i])
 
             elif int(choice) == 2:
@@ -45,7 +41,7 @@ def interactions(maze: MazeGenerator):
                     i = -1
 
             elif int(choice) == 4:
-                exit(1)
+                exit(0)
 
             else:
                 print("ERROR: please put 1, 2, 3 or 4 !")

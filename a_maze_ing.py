@@ -19,12 +19,8 @@ def a_maze_ing():
     #     exit(1)
 
     try:
-        maze = MazeGenerator()
-        maze.init_grid()
-        maze.prim()
-        maze.add_42()
-        maze.fix_isolated()
-        maze.write_output()
+        maze = MazeGenerator("config.txt")
+        maze.create_maze()
 
         if maze.config["PRINT_MODE"] == "pygame":
             draw_maze(maze.config, 0)

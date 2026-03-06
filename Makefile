@@ -12,7 +12,7 @@ install:
 	uv add pydantic pygame
 
 run:
-	uv run python a_maze_ing.py
+	uv run python a_maze_ing.py; echo $$?
 
 debug:
 	uv run python -m pdb a_maze_ing.py

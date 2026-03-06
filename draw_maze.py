@@ -50,9 +50,20 @@ def run_maze(hexa: str, w : int, h: int) -> dict:
     return cell_walls
 
 
-def print_walls(cell_walls: list, width: int, cell: int,
+def print_walls(cell_walls: list, width: int, height: int, cell: int,
                 screen: pygame.Surface, x: int, y: int, x1: int, y1: int,
-                x2: int, y2: int, color_ft: list, color: tuple) -> None:
+                x2: int, y2: int, color_ft: list, color: tuple, i: int) -> None:
+    # x0 = i % width
+    # y0 = i // width
+    # cell_x = x + x0 * cell
+    # cell_y = y + y0 * cell
+    # while cell_y < height:
+    #     while cell_x < width:
+    #         if cell_x % 2 != 0 and cell_y % 2 != 0:
+    #             pygame.draw.rect(screen,
+    #                             GREEN,
+    #                             (cell_x, cell_y, cell, cell))
+
     for i, dic in enumerate(cell_walls):
             x0 = i % width
             y0 = i // width
@@ -259,8 +270,8 @@ def draw_maze(maze_datas: dict, i: int) -> None:
                                 COLORS[i],
                                 (x, y, (width+2) * cell, (height+2) * cell),
                                  cell)
-                print_walls(cell_walls, width, cell, screen, x, y, x1, y1, x2,
-                            y2, color_ft, COLORS[i])
+                print_walls(cell_walls, width, height, cell, screen, x, y, x1,
+                            y1, x2, y2, color_ft, COLORS[i], i)
                 surf_lst = []
                 for nb, line in enumerate(lines):
                     surf = font.render(line, True, COLORS[i])
