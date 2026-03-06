@@ -21,7 +21,6 @@ def a_maze_ing():
             draw_ascii(maze.config, "rgb.WHITE")
             interactions(maze)
 
-
     except pydantic.ValidationError as e:
         for error in e.errors():
             print(f"ERROR: {error['msg'].replace('Value error, ', '')}")
@@ -32,6 +31,7 @@ def a_maze_ing():
     except KeyboardInterrupt:
         print("\nKO")
         exit(1)
+
 
 if __name__ == "__main__":
     a_maze_ing()

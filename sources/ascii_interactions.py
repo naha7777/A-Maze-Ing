@@ -2,6 +2,7 @@ from sources.maze_generator import MazeGenerator
 from sources.draw_ascii import draw_ascii
 from sources.draw_path import draw_path
 
+
 def interactions(maze: MazeGenerator):
     show_path = False
     i = 0
