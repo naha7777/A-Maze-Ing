@@ -70,8 +70,8 @@ def draw_ascii(maze_datas: dict[str, Any], color: str) -> None:
 
     grid = [[" " for _ in range(width)] for _ in range(height)]
 
-    inp_grid = (inp[0] - 1, inp[1] - 1)
-    outp_grid = (outp[0] - 1, outp[1] - 1)
+    inp_grid = (inp[0], inp[1])
+    outp_grid = (outp[0], outp[1])
     i = 0
     for y in range(height):
         for x in range(width):

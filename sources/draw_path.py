@@ -59,18 +59,16 @@ def draw_path(maze_datas: dict[str, Any], color: str) -> None:
     grid = [[" " for _ in range(width)] for _ in range(height)]
 
     path = find_path(maze_datas)
-    inp_grid = (inp[0] - 1, inp[1] - 1)
-    outp_grid = (outp[0] - 1, outp[1] - 1)
-    path_coordinates = calcul_path_coordinates(inp_grid, path)
+    path_coordinates = calcul_path_coordinates(inp, path)
 
     i = 0
     for y in range(height):
         for x in range(width):
             if (x, y) in color_ft:
                 grid[y-1][x-1] = (color_text(wall, rgb.BLUE))
-            if (x, y) == inp_grid:
+            if (x, y) == inp:
                 grid[y][x] = (color_text(wall, rgb.GREEN))
-            if (x, y) == outp_grid:
+            if (x, y) == outp:
                 grid[y][x] = (color_text(wall, rgb.RED))
             if x % 2 != 0 and y % 2 != 0:
                 grid[y][x] = (color_text(wall, color_rgb))
