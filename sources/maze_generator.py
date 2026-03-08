@@ -28,24 +28,15 @@ class MazeConfig(BaseModel):
     def validate_rules(self) -> MazeConfig:
         """Validate inter-field constraints."""
         if not self.output_file.endswith(".txt"):
-            raise ValueError("output file must end with .txt")
+            raise ValueError("Output file must end with .txt")
 
-        if not (1 <= self.entry[0] <= self.width and 1 <= self.entry[1] <= self.height):
+        if not (0 <= self.entry[0] <= self.width
+                and 0 <= self.entry[1] <= self.height):
             raise ValueError(f"Entry {self.entry} out of bounds")
 
-        if not (1 <= self.exit[0] <= self.width and 1 <= self.exit[1] <= self.height):
+        if not (0 <= self.exit[0] <= self.width
+                and 0 <= self.exit[1] <= self.height):
             raise ValueError(f"Exit {self.exit} out of bounds")
-
-        max_x = self.width * 2 - 1
-        max_y = self.height * 2 - 1
-        if not (1 <= self.entry[0] <= max_x and 1 <= self.entry[1] <= max_y):
-            raise ValueError(
-                f"Entry {self.entry} out of bounds (odd coords, max {max_x},{max_y})"
-            )
-        if not (1 <= self.exit[0] <= max_x and 1 <= self.exit[1] <= max_y):
-            raise ValueError(
-                f"Exit {self.exit} out of bounds (odd coords, max {max_x},{max_y})"
-            )
 
         if self.entry[0] == self.exit[0] and self.entry[1] == self.exit[1]:
             raise ValueError("Exit and Entry are in the same cell")
@@ -53,12 +44,12 @@ class MazeConfig(BaseModel):
         dx = abs(self.entry[0] - self.exit[0])
         dy = abs(self.entry[1] - self.exit[1])
         if (dx == 2 and dy == 0) or (dx == 0 and dy == 2):
-            raise ValueError("Exit and Entry are too close (directly adjacent cells)")
+            raise ValueError("Exit and Entry are too close"
+                             "(directly adjacent cells)")
 
         if self.seed is not None and not (0 <= self.seed <= 2**32 - 1):
-            raise ValueError(
-                f"SEED must be between 0 and {2**32 - 1}, got '{self.seed}'"
-            )
+            raise ValueError(f"SEED must be between 0 and {2**32 - 1}, "
+                             f"got '{self.seed}'")
 
         entry_pos = (self.entry[0], self.entry[1])
         exit_pos = (self.exit[0], self.exit[1])
@@ -74,16 +65,14 @@ def parse_coords(value: str, key: str) -> list[int]:
     """Parse a coordinate string 'x,y' into a list of two integers."""
     parts = value.strip().split(",")
     if len(parts) != 2:
-        raise ValueError(
-            f"{key} must have exactly 2 values separated by a comma, got '{value}'"
-        )
+        raise ValueError(f"{key} must have exactly 2 values "
+                         f"separated by a comma, got '{value}'")
     result: list[int] = []
     for part in parts:
         part = part.strip()
         if not part.lstrip("-").isdigit():
-            raise ValueError(
-                f"{key} values must be integers, got '{part}' in '{value}'"
-            )
+            raise ValueError(f"{key} values must be integers, got '{part}' in"
+                             f" '{value}'")
         result.append(int(part))
     return result
 
@@ -92,9 +81,8 @@ def parse_perfect(value: str) -> bool:
     """Parse a boolean string for the PERFECT config key."""
     normalised = value.strip().upper()
     if normalised not in ("TRUE", "FALSE"):
-        raise ValueError(
-            f"PERFECT must be True or False (case-insensitive), got '{value}'"
-        )
+        raise ValueError(f"PERFECT must be True or False "
+                         f", got '{value}'")
     return normalised == "TRUE"
 
 
@@ -106,7 +94,8 @@ class MazeGenerator:
         self.config: dict[str, Any] = {}
         self.last_seed: int = 0
 
-        mandatory_keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
+        mandatory_keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
+                          "OUTPUT_FILE", "PERFECT"]
         additional_keys = ["SEED", "PRINT_MODE"]
 
         with open(config_file, "r") as f:
@@ -175,8 +164,10 @@ class MazeGenerator:
 
         self.config["WIDTH"] = validated.width * 2 + 1
         self.config["HEIGHT"] = validated.height * 2 + 1
-        self.config["ENTRY"] = (validated.entry[0] * 2 - 1, validated.entry[1] * 2 - 1)
-        self.config["EXIT"] = (validated.exit[0] * 2 - 1, validated.exit[1] * 2 - 1)
+        self.config["ENTRY"] = (validated.entry[0] * 2,
+                                validated.entry[1] * 2)
+        self.config["EXIT"] = (validated.exit[0] * 2,
+                               validated.exit[1] * 2)
         self.config["PERFECT"] = validated.perfect
         self.config["SEED"] = validated.seed
         self.config["PRINT_MODE"] = validated.print_mode
@@ -357,10 +348,16 @@ class MazeGenerator:
         return hex(value)[2:].upper()
 
     def solve(self) -> list[str]:
-        """BFS shortest path from entry to exit, returns cardinal directions."""
+        """
+        BFS shortest path from entry to exit, returns cardinal directions.
+        """
         from collections import deque
         entry_x, entry_y = self.config["ENTRY"]
+        entry_x |= + 1 
+        entry_y |= + 1 
         exit_x, exit_y = self.config["EXIT"]
+        exit_x |= + 1 
+        exit_y |= + 1 
         goal = (exit_x, exit_y)
 
         queue: deque[tuple[tuple[int, int], list[str]]] = deque()
@@ -371,7 +368,10 @@ class MazeGenerator:
             (x, y), directions = queue.popleft()
             if (x, y) == goal:
                 return directions
-            for dx, dy, direction in ((0, -1, "N"), (0, 1, "S"), (1, 0, "E"), (-1, 0, "W")):
+            for dx, dy, direction in ((0, -1, "N"),
+                                      (0, 1, "S"),
+                                      (1, 0, "E"),
+                                      (-1, 0, "W")):
                 nx, ny = x + dx, y + dy
                 if (nx, ny) in visited:
                     continue
