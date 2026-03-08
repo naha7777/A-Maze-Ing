@@ -52,9 +52,7 @@ def interactions(maze: MazeGenerator) -> None:
                 exit(0)
 
             else:
-                print("ERROR: please put 1, 2, 3, 4 or 5 !")
-                exit(1)
+                raise ValueError("please put 1, 2, 3, 4 or 5 !")
 
         except ValueError as e:
-            print(e)
-            exit(1)
+            raise ValueError(e)
