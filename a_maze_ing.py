@@ -12,6 +12,7 @@ def a_maze_ing() -> None:
         if len(sys.argv) != 2:
             raise ValueError("must have 2 arg")
         maze = MazeGenerator(sys.argv[1])
+        print(maze.config['ENTRY'])
         maze.create_maze()
 
         if maze.config["PRINT_MODE"] == "pygame":
@@ -25,11 +26,11 @@ def a_maze_ing() -> None:
         for error in e.errors():
             print(f"ERROR: {error['msg'].replace('Value error, ', '')}")
 
-    except KeyError as e:
+    except (KeyError, ValueError) as e:
         print(f"ERROR: {e}")
 
     except KeyboardInterrupt:
-        print("\nKO")
+        print("\nThe program was Kill")
         exit(1)
 
 
