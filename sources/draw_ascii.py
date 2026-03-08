@@ -63,24 +63,24 @@ def draw_ascii(maze_datas: dict[str, Any], color: str) -> None:
     color_name = color.split(".")[1]
     color_rgb: tuple[int, int, int] = getattr(rgb, color_name)
 
-    color_ft = [(2, 2), (2, 3), (2, 4), (3, 4),
-                (4, 4), (4, 5), (4, 6), (6, 2),
-                (7, 2), (8, 2), (8, 3), (8, 4),
-                (7, 4), (6, 4), (6, 5), (6, 6), (7, 6), (8, 6)]
+    color_ft = [(1, 1), (1, 2), (1, 3), (2, 3),
+                (3, 3), (3, 4), (3, 5), (5, 1),
+                (6, 1), (7, 1), (7, 2), (7, 3),
+                (6, 3), (5, 3), (5, 4), (5, 5), (6, 5), (7, 5)]
 
     grid = [[" " for _ in range(width)] for _ in range(height)]
 
     i = 0
     for y in range(height):
         for x in range(width):
-            if (x, y) in color_ft:
-                grid[y-1][x-1] = (color_text(wall, rgb.BLUE))
             if (x, y) == inp:
                 grid[y][x] = (color_text(wall, rgb.GREEN))
             if (x, y) == outp:
                 grid[y][x] = (color_text(wall, rgb.RED))
             if x % 2 != 0 and y % 2 != 0:
                 grid[y][x] = (color_text(wall, color_rgb))
+            if (x, y) in color_ft:
+                grid[y][x] = (color_text(wall, rgb.BLUE))
             if x % 2 == 0 and y % 2 == 0:
                 if cell_walls[i].get("S") == 1 and y + 1 < height:
                     grid[y + 1][x] = color_text(wall, color_rgb)
