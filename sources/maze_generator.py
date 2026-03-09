@@ -406,3 +406,4 @@ class MazeGenerator:
         self.generate()
         self.fix_isolated()
         self.write_output()
+        
