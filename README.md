@@ -79,6 +79,7 @@ We chose Prim's algorithm for a few reasons:
 - Creating the maze class
 - Writing the docstring
 - Seed management
+- File organization
 
 ### Our anticipated planning and how it evolved
 We divided the tasks among ourselves and kept each other regularly informed of the project's progress.\
@@ -89,7 +90,8 @@ We held daily check-ins to keep each other updated on progress.
 This approach fostered strong communication and allowed us to resolve issues quickly.
 
 ### Use of specific tools
-We shared our work with github and communicated with discord.
+We shared our work with **github** and communicated with **discord**.
+For programing we used **pydantic** and **pygame**
 
 ## Bonuses :
 - Recreated the same ASCII outpout in pygame
@@ -116,3 +118,6 @@ AI was used for the following tasks :
 - help with git
 - makefile debugging
 - help for translation
+- better understanding certain things in Python
+- help us on some maths aspect
+- help create clear docstrings
