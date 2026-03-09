@@ -4,6 +4,7 @@ from sources.maze_generator import MazeGenerator
 import sys
 import os
 from typing import TYPE_CHECKING, Any
+import time
 
 if TYPE_CHECKING:
     import pygame.sprite
@@ -20,8 +21,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, start: tuple[int, int], width: int, height: int,
                  cell: int) -> None:
         super().__init__()
-        px = start[0] * cell + cell + cell// 2
-        py = start[1] * cell + cell + cell// 2
+        px = start[0] * cell + cell + cell // 2
+        py = start[1] * cell + cell + cell // 2
         if cell == 20:
             player_size = cell / 2
         elif cell == 10:
@@ -138,7 +139,6 @@ def print_walls(cell_walls: list[dict[str, int]], width: int, height: int,
                     pygame.draw.rect(screen, color, (cell_x + cell, cell_y,
                                                      cell, cell))
                 idx += 1
-
             if (x0, y0) in color_ft:
                 pygame.draw.rect(screen, BLUE, (cell_x - cell, cell_y - cell,
                                                 cell, cell))
@@ -146,7 +146,6 @@ def print_walls(cell_walls: list[dict[str, int]], width: int, height: int,
                 pygame.draw.rect(screen, GREEN, (cell_x, cell_y, cell, cell))
             if x0 == x2 and y0 == y2:
                 pygame.draw.rect(screen, RED, (cell_x, cell_y, cell, cell))
-                idx += 1
 
 
 def print_path(cell_walls: list[dict[str, int]], width: int, height: int,
@@ -166,10 +165,10 @@ def print_path(cell_walls: list[dict[str, int]], width: int, height: int,
 
 
 def rm_path(cell_walls: list[dict[str, int]], width: int, height: int,
-               cell: int, screen: pygame.Surface, x: int, y: int, x1: int,
-               y1: int, x2: int, y2: int, color_ft: list[tuple[int, int]],
-               path_coordinates: list[tuple[int, int]],
-               color: tuple[int, int, int]) -> None:
+            cell: int, screen: pygame.Surface, x: int, y: int, x1: int,
+            y1: int, x2: int, y2: int, color_ft: list[tuple[int, int]],
+            path_coordinates: list[tuple[int, int]],
+            color: tuple[int, int, int]) -> None:
     print_walls(cell_walls, width, height, cell, screen, x, y, x1, y1, x2, y2,
                 color_ft, color)
     for y0 in range(height):
@@ -319,6 +318,11 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
     raw_width = maze_datas.get("WIDTH")
     raw_height = maze_datas.get("HEIGHT")
 
+    if raw_width//2 >= 233:
+        raise ValueError("Width too hight for pygame mode")
+    if raw_height//2 >= 88:
+        raise ValueError("Height too hight for pygame mode")
+
     if not isinstance(raw_inp, tuple) or not isinstance(raw_outp, tuple):
         raise ValueError("ERROR: invalid ENTRY or EXIT")
     if not isinstance(raw_width, int) or not isinstance(raw_height, int):
@@ -414,7 +418,6 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
     bg = pygame.transform.scale(bg, screen_size)
 
     while True:
-
         mouse_pos = change_mouse_cursor(surf1, surf2, surf3, surf4, surf0,
                                         surf5, surf6)
 
@@ -423,19 +426,16 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                 pygame.quit()
                 sys.exit(0)
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-
                     if surf0.collidepoint(mouse_pos):
                         easter_egg()
-
                     elif surf1.collidepoint(mouse_pos):
                         config_file = str(maze_datas['CONFIG_FILE'])
                         maze = MazeGenerator(config_file)
                         maze.create_maze()
                         pygame.quit()
                         draw_maze(maze.config, i, maze)
-
                     elif surf2.collidepoint(mouse_pos):
                         play_sound()
                         if show_path is False:
@@ -443,15 +443,14 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                                        x, y, x1, y1, x2, y2, color_ft,
                                        path_coordinates, COLORS[i])
                             hide_path(surf_lst, screen, font,
-                                      COLORS[i], lines, maze_bottom )
+                                      COLORS[i], lines, maze_bottom)
                         else:
                             rm_path(cell_walls, width, height, cell, screen,
-                                       x, y, x1, y1, x2, y2, color_ft,
-                                       path_coordinates, COLORS[i])
+                                    x, y, x1, y1, x2, y2, color_ft,
+                                    path_coordinates, COLORS[i])
                             show_the_path(surf_lst, screen, font,
                                           COLORS[i], lines, maze_bottom)
                         show_path = not show_path
-
                     elif surf3.collidepoint(mouse_pos):
                         play_sound()
                         i += 1
@@ -465,7 +464,6 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                                         COLORS[i])
                         if i == 6:
                             i = -1
-
                     elif surf4.collidepoint(mouse_pos):
                         play_sound()
                         if show_path:
@@ -473,6 +471,7 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                         else:
                             won = False
                             go_gaming = True
+                            start_time = time.time()
                             player.kill()
                             player = Player(inp, width, height, cell)
                             arrival = End(raw_outp, cell)
@@ -483,17 +482,81 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                             arrival_group.add(arrival)
                             screen.fill(BLACK)
                             pygame.draw.rect(screen, COLORS[i],
-                                            (x, y, (width+2) * cell, (height+2) * cell), cell)
-                            print_walls(cell_walls, width, height, cell, screen, x, y, x1,
+                                             (x, y, (width+2) * cell,
+                                             (height+2) * cell), cell)
+                            print_walls(cell_walls, width, height, cell,
+                                        screen, x, y, x1,
                                         y1, x2, y2, color_ft, COLORS[i])
-
                     elif surf5.collidepoint(mouse_pos):
                         play_sound()
                         print(maze.last_seed)
-
                     elif surf6.collidepoint(mouse_pos):
                         pygame.quit()
                         sys.exit(0)
+
+            elif event.type == pygame.KEYDOWN:
+                if event.unicode == '1':
+                    config_file = str(maze_datas['CONFIG_FILE'])
+                    maze = MazeGenerator(config_file)
+                    maze.create_maze()
+                    pygame.quit()
+                    draw_maze(maze.config, i, maze)
+                elif event.unicode == '2':
+                    play_sound()
+                    if show_path is False:
+                        print_path(cell_walls, width, height, cell, screen,
+                                   x, y, x1, y1, x2, y2, color_ft,
+                                   path_coordinates, COLORS[i])
+                        hide_path(surf_lst, screen, font,
+                                  COLORS[i], lines, maze_bottom)
+                    else:
+                        rm_path(cell_walls, width, height, cell, screen,
+                                x, y, x1, y1, x2, y2, color_ft,
+                                path_coordinates, COLORS[i])
+                        show_the_path(surf_lst, screen, font,
+                                      COLORS[i], lines, maze_bottom)
+                    show_path = not show_path
+                elif event.unicode == '3':
+                    play_sound()
+                    i += 1
+                    if show_path is True:
+                        print_path(cell_walls, width, height, cell, screen,
+                                   x, y, x1, y1, x2, y2, color_ft,
+                                   path_coordinates, COLORS[i])
+                    else:
+                        print_walls(cell_walls, width, height, cell,
+                                    screen, x, y, x1, y1, x2, y2, color_ft,
+                                    COLORS[i])
+                    if i == 6:
+                        i = -1
+                elif event.unicode == '4':
+                    play_sound()
+                    if show_path:
+                        print("Please, hide the path!")
+                    else:
+                        won = False
+                        go_gaming = True
+                        player.kill()
+                        player = Player(inp, width, height, cell)
+                        arrival = End(raw_outp, cell)
+                        all_sprites.empty()
+                        arrival_group.empty()
+                        all_sprites.add(player)
+                        all_sprites.add(arrival)
+                        arrival_group.add(arrival)
+                        screen.fill(BLACK)
+                        pygame.draw.rect(screen, COLORS[i],
+                                         (x, y, (width+2) * cell,
+                                         (height+2) * cell), cell)
+                        print_walls(cell_walls, width, height, cell,
+                                    screen, x, y, x1,
+                                    y1, x2, y2, color_ft, COLORS[i])
+                elif event.unicode == '5':
+                    play_sound()
+                    print(maze.last_seed)
+                elif event.unicode == '6':
+                    pygame.quit()
+                    sys.exit(0)
 
             else:
                 pygame.draw.rect(screen, COLORS[i],
@@ -506,7 +569,24 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                     surf = font.render(line, True, COLORS[i])
                     surf_lst.append(surf)
                     screen.blit(surf, (1, maze_bottom + nb * line_h))
+        # if go_gaming:
+        #     elapsed = time.time() - start_time
+        #     mins = int(elapsed) // 60
+        #     secs = int(elapsed) % 60
+        #     font_timer = pygame.font.SysFont('monospace', 23)
+        #     timer_str = f"Time: {mins:02d}:{secs:02d}"
+        #     timer_surf = font_timer.render(timer_str, True, WHITE)
+        #     pygame.draw.rect(screen, BLACK, ((width+2)*cell+10, 50, 200, 30))
+        #     screen.blit(timer_surf, ((width+2)*cell+10, 50))
         if go_gaming:
+            elapsed = time.time() - start_time
+            mins = int(elapsed) // 60
+            secs = int(elapsed) % 60
+            font_timer = pygame.font.SysFont('monospace', 23)
+            timer_str = f"Time: {mins:02d}:{secs:02d}"
+            timer_surf = font_timer.render(timer_str, True, WHITE)
+            pygame.draw.rect(screen, BLACK, ((width+2)*cell+10, 50, 200, 30))
+            screen.blit(timer_surf, ((width+2)*cell+10, 50))
             won = game(player, arrival_group, screen, all_sprites, won,
                        arrival, walls_group, height, width, cell)
             if won:

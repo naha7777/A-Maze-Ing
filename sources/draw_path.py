@@ -72,17 +72,20 @@ def draw_path(maze_datas: dict[str, Any], color: str) -> None:
                 grid[y][x] = (color_text(wall, color_rgb))
             if (x, y) in color_ft:
                 grid[y][x] = (color_text(wall, rgb.BLUE))
-            if (x, y) in path_coordinates:
-                if (x, y) == path_coordinates[len(path_coordinates)-1]:
-                    continue
-                else:
-                    grid[y][x] = (color_text(wall, rgb.GREEN))
             if x % 2 == 0 and y % 2 == 0:
                 if cell_walls[i].get("S") == 1 and y + 1 < height:
                     grid[y + 1][x] = color_text(wall, color_rgb)
                 if cell_walls[i].get("E") == 1 and x + 1 < width:
                     grid[y][x + 1] = color_text(wall, color_rgb)
                 i += 1
+
+    for y in range(height):
+        for x in range(width):
+            if (x, y) in path_coordinates:
+                if (x, y) == path_coordinates[-1]:
+                    continue
+                if grid[y][x] == " ":
+                    grid[y][x] = color_text(wall, rgb.GREEN)
 
     for x in range(width+2):
         if x == width+1:
