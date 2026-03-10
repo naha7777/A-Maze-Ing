@@ -15,8 +15,8 @@ PATTERN_WALLS: set[tuple[int, int]] = {
 
 class MazeConfig(BaseModel):
     """Validated configuration for the maze generator."""
-    width: int = Field(..., ge=4)
-    height: int = Field(..., ge=4)
+    width: int = Field(..., ge=4, le=1000)
+    height: int = Field(..., ge=4, le=1000)
     entry: list[int] = Field(..., min_length=2, max_length=2)
     exit: list[int] = Field(..., min_length=2, max_length=2)
     output_file: str = Field(...)
@@ -256,10 +256,10 @@ class MazeGenerator:
                 for x in range(1, width + 1)
                 for y in range(1, height + 1)
                 if self.maze[f"{x}:{y}"] == 1
-                and (x % 2 == 1 and y % 2 == 1)
+                and (x % 2 == 1 or y % 2 == 1)
                 and (not use_42 or (x, y) not in PATTERN_WALLS)
             ]
-            extra = max(1, len(walls) // 10)
+            extra = max(1, len(walls) // 20)
             for x, y in random.sample(walls, min(extra, len(walls))):
                 self.maze[f"{x}:{y}"] = 0
 

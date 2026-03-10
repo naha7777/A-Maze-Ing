@@ -47,7 +47,7 @@ def interactions(maze: MazeGenerator) -> None:
                     i = -1
 
             elif int(choice) == 4:
-                print(maze.last_seed)
+                print(f"seed: {maze.last_seed}")
 
             elif int(choice) == 5:
                 exit(0)

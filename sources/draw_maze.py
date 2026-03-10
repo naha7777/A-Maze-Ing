@@ -497,7 +497,7 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                                         y1, x2, y2, color_ft, COLORS[i])
                     elif surf5.collidepoint(mouse_pos):
                         play_sound()
-                        print(maze.last_seed)
+                        print(f"seed: {maze.last_seed}")
                     elif surf6.collidepoint(mouse_pos):
                         pygame.quit()
                         sys.exit(0)
@@ -563,7 +563,7 @@ def draw_maze(maze_datas: dict[str, Any], i: int,
                                     y1, x2, y2, color_ft, COLORS[i])
                 elif event.unicode == '5':
                     play_sound()
-                    print(maze.last_seed)
+                    print(f"seed: {maze.last_seed}")
                 elif event.unicode == '6':
                     pygame.quit()
                     sys.exit(0)
