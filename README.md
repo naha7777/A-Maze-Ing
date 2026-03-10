@@ -79,7 +79,7 @@ The maze generation engine was designed as a reusable Python module.
 
 ### How install the package ?
 ```bash
-python3 -m pip install --user mazegen_anacharp_emarette-0.1.0-py3-none-any.whl --force-reinstall
+python3 -m pip install --user mazegen-1.0.0-py3-none-any.whl --force-reinstall
 ```
 How run it ?
 ``` bash

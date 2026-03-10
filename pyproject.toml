@@ -1,7 +1,11 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "mazegen_anacharp_emarette"
-version = "0.1.0"
-description = "Add your description here"
+name = "mazegen"
+version = "1.0.0"
+description = ""
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -10,15 +14,14 @@ dependencies = [
     "pygame-ce>=2.5.7",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.setuptools.package-dir]
+"mazegen" = "sources"
 
-[tool.hatch.build.targets.wheel]
-packages = ["sources"]
+[tool.setuptools]
+include-package-data = true
 
-[tool.hatch.build.targets.wheel.sources]
-"sources" = "mazegen_anacharp_emarette"
+[tool.setuptools.package-data]
+"mazegen" = ["resources/*"]
 
 [dependency-groups]
 dev = [

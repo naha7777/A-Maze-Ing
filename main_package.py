@@ -1,4 +1,4 @@
-from mazegen_anacharp_emarette import MazeGenerator, draw_maze, draw_ascii, interactions
+from mazegen import MazeGenerator, draw_maze, draw_ascii, interactions
 import sys
 import pydantic
 
