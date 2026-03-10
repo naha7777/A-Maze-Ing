@@ -9,7 +9,7 @@ install:
 
 run:
 	uv sync
-	.venv/bin/python3 a_maze_ing.py /dev/random
+	.venv/bin/python3 a_maze_ing.py config.txt
 
 
 debug:
